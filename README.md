@@ -166,13 +166,13 @@ GET /api/books?filter=FANTASY&sortBy=createdAt&sort=desc&limit=5
 ```
 
 
-- 🔗 **Live URL:** [https://l-2-a-3-library-management.vercel.app](#)
+- 🔗 **Live URL:** https://l-2-a-3-library-management.vercel.app
 
 ---
 
 ## 🧑‍💻 Author
 
-**Your Name**  
-🔗 GitHub: [github.com/your-username](https://github.com/Sakibfy/Library-Management)
+**Mdsakibfy**  
+🔗 GitHub: https://github.com/Sakibfy/Library-Management
 
 
