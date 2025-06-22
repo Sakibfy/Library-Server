@@ -1,27 +1,36 @@
 import { Request, Response } from 'express';
-
 import sendResponse from '../../utils/sendResponse';
 import Book from '../book/book.model';
-import { Borrow } from './borrow.model';
+import Borrow from './borrow.model';
 
-// 1. Borrow Book Controller
+// ✅ 1. Borrow a Book Controller
 export const borrowBook = async (req: Request, res: Response) => {
   try {
     const { book, quantity, dueDate } = req.body;
 
     const existingBook = await Book.findById(book);
-    if (!existingBook || existingBook.copies < quantity) {
-      return res.status(400).json({
+
+    if (!existingBook) {
+       res.status(404).json({
         success: false,
-        message: 'Not enough copies available',
+        message: 'Book not found',
       });
     }
 
-    existingBook.copies -= quantity;
-    if (existingBook.copies === 0) {
-      existingBook.available = false;
-    }
-    await existingBook.save();
+    // if (existingBook.copies < quantity) {
+    //    res.status(400).json({
+    //     success: false,
+    //     message: 'Not enough copies available',
+    //   });
+    // }
+
+    // existingBook.copies -= quantity;
+
+    // if (existingBook.copies === 0) {
+    //   existingBook.available = false;
+    // }
+
+    // await existingBook.save();
 
     const borrowed = await Borrow.create({ book, quantity, dueDate });
 
@@ -39,7 +48,8 @@ export const borrowBook = async (req: Request, res: Response) => {
   }
 };
 
-// 2. Borrow Summary Controller
+
+// ✅ 2. Get Borrow Summary (Aggregation)
 export const getBorrowSummary = async (req: Request, res: Response) => {
   try {
     const summary = await Borrow.aggregate([
@@ -51,13 +61,15 @@ export const getBorrowSummary = async (req: Request, res: Response) => {
       },
       {
         $lookup: {
-          from: 'books',
+          from: 'books', 
           localField: '_id',
           foreignField: '_id',
           as: 'book',
         },
       },
-      { $unwind: '$book' },
+      {
+        $unwind: '$book',
+      },
       {
         $project: {
           book: {

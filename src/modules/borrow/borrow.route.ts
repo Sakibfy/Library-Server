@@ -1,12 +1,11 @@
-
 import { Router } from 'express';
-import { borrowBook, getBorrowSummary } from './borrow.controller';
-
+import {  borrowBook, getBorrowSummary } from './borrow.controller';
 
 const router = Router();
 
-router.post('/borrow', borrowBook);
-router.get('/borrow', getBorrowSummary);
+router.post('/', borrowBook);   
+router.get('/', getBorrowSummary); 
 
 export default router;
+
 

@@ -4,14 +4,14 @@ import { createBook, deleteBook, getAllBooks, getSingleBook, updateBook } from '
 
 
 
+
 const router = Router();
 
-router.post('/books', createBook);
-router.get('/books', getAllBooks);
-router.get('/books/:id', getSingleBook);      
-router.put('/books/:id', updateBook);          
-router.delete('/books/:id', deleteBook);       
-
+router.post('/', createBook);
+router.get('/:id', getSingleBook);      
+router.put('/:id', updateBook);          
+router.delete('/:id', deleteBook);       
+router.get('/', getAllBooks);
 
 export default router;
 

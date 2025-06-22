@@ -50,7 +50,7 @@ export const getSingleBook = async (req: Request, res: Response) => {
   const book = await Book.findById(id);
 
   if (!book) {
-    return res.status(404).json({
+     res.status(404).json({
       success: false,
       message: 'Book not found',
     });
@@ -72,7 +72,7 @@ export const updateBook = async (req: Request, res: Response) => {
   });
 
   if (!updated) {
-    return res.status(404).json({
+     res.status(404).json({
       success: false,
       message: 'Book not found to update',
     });
@@ -91,7 +91,7 @@ export const deleteBook = async (req: Request, res: Response) => {
   const deleted = await Book.findByIdAndDelete(id);
 
   if (!deleted) {
-    return res.status(404).json({
+     res.status(404).json({
       success: false,
       message: 'Book not found to delete',
     });
@@ -103,3 +103,6 @@ export const deleteBook = async (req: Request, res: Response) => {
     data: null,
   });
 };
+
+
+
