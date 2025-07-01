@@ -22,7 +22,7 @@ app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use(indeex_1.default);
 app.get("/", (req, res) => {
-    res.send({ success: true, message: "iam here" });
+    res.send({ success: true, message: "Server is Runing Now" });
 });
 function server() {
     return __awaiter(this, void 0, void 0, function* () {

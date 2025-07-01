@@ -16,7 +16,7 @@ exports.getBorrowSummary = exports.borrowBook = void 0;
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const book_model_1 = __importDefault(require("../book/book.model"));
 const borrow_model_1 = __importDefault(require("./borrow.model"));
-// ✅ 1. Borrow a Book Controller
+// POST /api/borrow
 const borrowBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { book, quantity, dueDate } = req.body;
@@ -27,17 +27,6 @@ const borrowBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 message: 'Book not found',
             });
         }
-        // if (existingBook.copies < quantity) {
-        //    res.status(400).json({
-        //     success: false,
-        //     message: 'Not enough copies available',
-        //   });
-        // }
-        // existingBook.copies -= quantity;
-        // if (existingBook.copies === 0) {
-        //   existingBook.available = false;
-        // }
-        // await existingBook.save();
         const borrowed = yield borrow_model_1.default.create({ book, quantity, dueDate });
         (0, sendResponse_1.default)(res, {
             success: true,
@@ -54,16 +43,11 @@ const borrowBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.borrowBook = borrowBook;
-// ✅ 2. Get Borrow Summary (Aggregation)
-const getBorrowSummary = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+// GET /api/borrow
+const getBorrowSummary = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const summary = yield borrow_model_1.default.aggregate([
-            {
-                $group: {
-                    _id: '$book',
-                    totalQuantity: { $sum: '$quantity' },
-                },
-            },
+            { $group: { _id: '$book', totalQuantity: { $sum: '$quantity' } } },
             {
                 $lookup: {
                     from: 'books',
@@ -72,15 +56,10 @@ const getBorrowSummary = (req, res) => __awaiter(void 0, void 0, void 0, functio
                     as: 'book',
                 },
             },
-            {
-                $unwind: '$book',
-            },
+            { $unwind: '$book' },
             {
                 $project: {
-                    book: {
-                        title: '$book.title',
-                        isbn: '$book.isbn',
-                    },
+                    book: { title: '$book.title', isbn: '$book.isbn' },
                     totalQuantity: 1,
                 },
             },

@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(routers)
 
 app.get("/", (req, res) =>{
-  res.send({ success: true, message: "iam here"})
+  res.send({ success: true, message: "Server is Runing Now"})
 })
 
 

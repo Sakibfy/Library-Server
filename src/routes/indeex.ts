@@ -7,8 +7,8 @@ import bookRoute from "../modules/book/book.route";
 
 const routers = Router();
 
-routers.use('/books', bookRoute);
-routers.use('/borrow', borrowRoute); 
+routers.use('/api/books', bookRoute);
+routers.use('/api/borrow', borrowRoute);
 
 export default routers;
 
