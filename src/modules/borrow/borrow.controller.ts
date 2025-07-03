@@ -3,13 +3,13 @@ import sendResponse from '../../utils/sendResponse';
 import Book from '../book/book.model';
 import Borrow from './borrow.model';
 
-// POST /api/borrow
+// ✅ POST /api/borrow/:bookId
 export const borrowBook = async (req: Request, res: Response) => {
   try {
-    const { book, quantity, dueDate } = req.body;
+    const { bookId } = req.params;
+    const { quantity, dueDate } = req.body;
 
-    
-    const existingBook = await Book.findById(book);
+    const existingBook = await Book.findById(bookId);
     if (!existingBook) {
        res.status(404).json({
         success: false,
@@ -17,8 +17,7 @@ export const borrowBook = async (req: Request, res: Response) => {
       });
     }
 
-   
-    const borrowed = await Borrow.create({ book, quantity, dueDate });
+    const borrowed = await Borrow.create({ book: bookId, quantity, dueDate });
 
     sendResponse(res, {
       success: true,
@@ -34,7 +33,7 @@ export const borrowBook = async (req: Request, res: Response) => {
   }
 };
 
-// GET /api/borrow
+// ✅ GET /api/borrow/summary/all
 export const getBorrowSummary = async (_req: Request, res: Response) => {
   try {
     const summary = await Borrow.aggregate([

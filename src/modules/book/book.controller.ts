@@ -3,12 +3,21 @@ import sendResponse from './../../utils/sendResponse';
 import Book from './book.model';
 
 export const createBook = async (req: Request, res: Response) => {
-  const book = await Book.create(req.body);
-  sendResponse(res, {
-    success: true,
-    message: 'Book created successfully',
-    data: book,
-  });
+  try {
+    const book = await Book.create(req.body);
+    
+    res.status(201).json({
+      success: true,
+      message: 'Book created successfully',
+      data: book,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to create book',
+      error: err,
+    });
+  }
 };
 
 
@@ -45,9 +54,10 @@ export const getAllBooks = async (req: Request, res: Response) => {
 
 
 // ✅ 3. Get Single Book by ID
+// book.controller.ts
 export const getSingleBook = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const book = await Book.findById(id);
+  const { bookId } = req.params; // ✅ Make sure it's bookId
+  const book = await Book.findById(bookId);
 
   if (!book) {
      res.status(404).json({
@@ -56,17 +66,18 @@ export const getSingleBook = async (req: Request, res: Response) => {
     });
   }
 
-  sendResponse(res, {
+  res.status(200).json({
     success: true,
     message: 'Book retrieved successfully',
     data: book,
   });
 };
 
+
 // ✅ 4. Update Book
 export const updateBook = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const updated = await Book.findByIdAndUpdate(id, req.body, {
+  const { bookId } = req.params;
+  const updated = await Book.findByIdAndUpdate(bookId, req.body, {
     new: true,
     runValidators: true,
   });
@@ -87,8 +98,8 @@ export const updateBook = async (req: Request, res: Response) => {
 
 // ✅ 5. Delete Book
 export const deleteBook = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const deleted = await Book.findByIdAndDelete(id);
+  const { bookId } = req.params;
+  const deleted = await Book.findByIdAndDelete(bookId);
 
   if (!deleted) {
      res.status(404).json({

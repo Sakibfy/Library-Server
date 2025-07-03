@@ -9,7 +9,7 @@ const router = Router();
 
 router.post('/', createBook);      
 router.get('/', getAllBooks);      
-router.get('/:bookId', getSingleBook); 
+router.get('/:bookId', getSingleBook);  
 router.put('/:bookId', updateBook);   
 router.delete('/:bookId', deleteBook); 
 
