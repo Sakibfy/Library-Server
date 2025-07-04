@@ -18,7 +18,13 @@ const config_1 = __importDefault(require("./config"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const indeex_1 = __importDefault(require("./routes/indeex"));
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: ['http://localhost:5173',
+        'http://localhost:5174',
+        'https://library-client-peach.vercel.app',
+    ],
+    credentials: true
+}));
 app.use(express_1.default.json());
 app.use(indeex_1.default);
 app.get("/", (req, res) => {

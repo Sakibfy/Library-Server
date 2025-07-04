@@ -16,12 +16,21 @@ exports.deleteBook = exports.updateBook = exports.getSingleBook = exports.getAll
 const sendResponse_1 = __importDefault(require("./../../utils/sendResponse"));
 const book_model_1 = __importDefault(require("./book.model"));
 const createBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const book = yield book_model_1.default.create(req.body);
-    (0, sendResponse_1.default)(res, {
-        success: true,
-        message: 'Book created successfully',
-        data: book,
-    });
+    try {
+        const book = yield book_model_1.default.create(req.body);
+        res.status(201).json({
+            success: true,
+            message: 'Book created successfully',
+            data: book,
+        });
+    }
+    catch (err) {
+        res.status(500).json({
+            success: false,
+            message: 'Failed to create book',
+            error: err,
+        });
+    }
 });
 exports.createBook = createBook;
 // ✅ 2. Get All Books with filtering, sorting, limiting
@@ -52,16 +61,17 @@ const getAllBooks = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.getAllBooks = getAllBooks;
 // ✅ 3. Get Single Book by ID
+// book.controller.ts
 const getSingleBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const book = yield book_model_1.default.findById(id);
+    const { bookId } = req.params; // ✅ Make sure it's bookId
+    const book = yield book_model_1.default.findById(bookId);
     if (!book) {
         res.status(404).json({
             success: false,
             message: 'Book not found',
         });
     }
-    (0, sendResponse_1.default)(res, {
+    res.status(200).json({
         success: true,
         message: 'Book retrieved successfully',
         data: book,
@@ -70,8 +80,8 @@ const getSingleBook = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.getSingleBook = getSingleBook;
 // ✅ 4. Update Book
 const updateBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const updated = yield book_model_1.default.findByIdAndUpdate(id, req.body, {
+    const { bookId } = req.params;
+    const updated = yield book_model_1.default.findByIdAndUpdate(bookId, req.body, {
         new: true,
         runValidators: true,
     });
@@ -90,8 +100,8 @@ const updateBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.updateBook = updateBook;
 // ✅ 5. Delete Book
 const deleteBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const deleted = yield book_model_1.default.findByIdAndDelete(id);
+    const { bookId } = req.params;
+    const deleted = yield book_model_1.default.findByIdAndDelete(bookId);
     if (!deleted) {
         res.status(404).json({
             success: false,

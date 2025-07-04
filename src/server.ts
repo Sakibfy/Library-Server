@@ -1,5 +1,5 @@
-import express from "express"
 import cors from "cors"
+import express from "express"
 import  config  from "./config";
 import mongoose from "mongoose";
 import routers from "./routes/indeex";
@@ -8,8 +8,11 @@ const app = express();
 
 
 app.use(cors({
-  origin: ['http://localhost:5173',
+  origin: [
+    'https://library-client-peach.vercel.app',
+    'http://localhost:5173',
     'http://localhost:5174',
+    
      
   ],
   credentials: true

@@ -16,18 +16,19 @@ exports.getBorrowSummary = exports.borrowBook = void 0;
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const book_model_1 = __importDefault(require("../book/book.model"));
 const borrow_model_1 = __importDefault(require("./borrow.model"));
-// POST /api/borrow
+// ✅ POST /api/borrow/:bookId
 const borrowBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { book, quantity, dueDate } = req.body;
-        const existingBook = yield book_model_1.default.findById(book);
+        const { bookId } = req.params;
+        const { quantity, dueDate } = req.body;
+        const existingBook = yield book_model_1.default.findById(bookId);
         if (!existingBook) {
             res.status(404).json({
                 success: false,
                 message: 'Book not found',
             });
         }
-        const borrowed = yield borrow_model_1.default.create({ book, quantity, dueDate });
+        const borrowed = yield borrow_model_1.default.create({ book: bookId, quantity, dueDate });
         (0, sendResponse_1.default)(res, {
             success: true,
             message: 'Book borrowed successfully',
@@ -43,7 +44,7 @@ const borrowBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.borrowBook = borrowBook;
-// GET /api/borrow
+// ✅ GET /api/borrow/summary/all
 const getBorrowSummary = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const summary = yield borrow_model_1.default.aggregate([
